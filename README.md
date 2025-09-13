@@ -1,7 +1,7 @@
 CryptoFlow Tracker: BTC & ETH Spot ETF Dashboard
-<[https://dlwpsms3gkrsus-glitch.github.io/btc-price-vs-spot-etf-flow-chart/>
+<https://dlwpsms3gkrsus-glitch.github.io/btc-price-vs-spot-etf-flow-chart/>
 
-➡️ Live Demo Website 바로가기 <[https://dlwpsms3gkrsus-glitch.github.io/btc-price-vs-spot-etf-flow-chart/>
+➡️ Live Demo Website 바로가기 <https://dlwpsms3gkrsus-glitch.github.io/btc-price-vs-spot-etf-flow-chart/>
 
 📜 프로젝트 소개 (About The Project)
 CryptoFlow Tracker는 비트코인(BTC)과 이더리움(ETH) 현물 ETF의 일일 순유입량(Net Inflow)과 가격 데이터를 시각적으로 추적하고 분석하는 완전 자동화된 웹 대시보드입니다.
