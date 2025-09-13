@@ -1,0 +1,39 @@
+name: Update ETF Charts Daily
+
+on:
+  workflow_dispatch: # 수동 실행 버튼
+  schedule:
+    # 한국 시간(KST) 기준 매일 오전 9시 10분에 실행
+    - cron: '10 0 * * *'
+
+jobs:
+  update-charts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas plotly yfinance selenium webdriver-manager
+
+      # ▼▼▼ [핵심 수정] BTC와 ETH 스크립트를 순서대로 실행 ▼▼▼
+      - name: Run chart generation scripts
+        run: |
+          python "run_analysis with ema_btc.py"
+          python "run_analysis_eth.py"
+      # ▲▲▲ ----------------------------------------- ▲▲▲
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git diff --quiet && git diff --staged --quiet || git commit -m "📊 Daily chart and data update"
+          git push
