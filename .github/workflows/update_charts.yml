@@ -23,11 +23,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas plotly yfinance selenium webdriver-manager
 
-      # ▼▼▼ [핵심 수정] BTC와 ETH 스크립트를 순서대로 실행 ▼▼▼
+      # ▼▼▼ [핵심 수정] BTC와 ETH 스크립트 및 eth supply chart 순서대로 실행 ▼▼▼
       - name: Run chart generation scripts
         run: |
           python "run_analysis with ema_btc.py"
           python "run_analysis_eth.py"
+          python "ethereum_growth_chart.py"
       # ▲▲▲ ----------------------------------------- ▲▲▲
 
       - name: Commit and push changes
