@@ -29,6 +29,7 @@
             align-items: flex-start;
             padding: 10px 0;
             border-bottom: 1px solid #2a3f5f;
+            flex-wrap: wrap;
         }
         .logo-section {
             display: flex;
@@ -76,7 +77,7 @@
         }
         .header-metrics {
             display: flex;
-            gap: 40px;
+            gap: 40px; /* 간격 조정 */
         }
         .live-crypto-price, .live-etf-inflow {
             text-align: right;
@@ -109,9 +110,8 @@
             margin-top: 0;
             font-weight: 500;
         }
-        
         /* 상세 비교 차트 섹션 스타일 */
-        .comparison-chart-section {
+        .comparison-chart-section, .supply-details-section {
             background-color: #1A2233;
             padding: 20px;
             border-radius: 8px;
@@ -124,7 +124,6 @@
             border: none;
             margin-top: 15px;
         }
-        /* ▼▼▼ [추가] 차트 헤더 및 바로가기 버튼 스타일 ▼▼▼ */
         .chart-header {
             display: flex;
             justify-content: space-between;
@@ -154,9 +153,9 @@
         .source-link-btn i {
             margin-left: 5px;
         }
-
+        
         /* 전체 화면 버튼 스타일 */
-        #fullscreen-btn {
+        .fullscreen-btn {
             position: absolute;
             top: 18px;
             right: 20px;
@@ -171,8 +170,10 @@
             line-height: 30px;
             text-align: center;
         }
+        
         /* 전체 화면 모드 스타일 */
-        .comparison-chart-section.fullscreen-mode {
+        .comparison-chart-section.fullscreen-mode,
+        .supply-details-section.fullscreen-mode {
             position: fixed;
             top: 0;
             left: 0;
@@ -187,10 +188,50 @@
         .fullscreen-mode iframe {
             height: calc(100% - 60px);
         }
-        .fullscreen-mode #fullscreen-btn {
+        .fullscreen-mode .fullscreen-btn {
             top: 25px;
             right: 25px;
             z-index: 1001;
+        }
+
+        /* 공급량 상세 정보 섹션 스타일 */
+        .supply-details-section.hidden {
+            display: none;
+        }
+        
+        .supply-header h2 {
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a3f5f;
+            padding-right: 40px; 
+        }
+
+        .supply-info {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .supply-percentage {
+            font-size: 16px;
+            color: #8c9db3;
+            font-weight: normal;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #2a3f5f;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #FFB800;
+            width: 0%; 
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
         }
         /* 푸터 스타일 */
         footer {
@@ -211,15 +252,6 @@
             z-index: 10;
         }
     </style>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-QBCMWL9C06"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-QBCMWL9C06');
-</script>
 </head>
 <body>
     <div class="container">
@@ -264,13 +296,47 @@
                         Farside 데이터 확인 <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </a>
                 </div>
-                <button id="fullscreen-btn" title="전체 화면">↗</button>
+                <button id="fullscreen-btn" class="fullscreen-btn" title="전체 화면">↗</button>
                 <iframe id="comparison-chart-iframe" src="graph_btc.html"></iframe>
+            </div>
+
+            <div id="btc-supply-section" class="supply-details-section">
+                <div class="supply-header">
+                    <h2>Bitcoin Supply Details</h2>
+                </div>
+                <div class="supply-info">
+                    <div class="supply-text">
+                        <span id="current-supply-btc">Loading...</span> / 21,000,000 BTC
+                    </div>
+                    <div class="supply-percentage" id="supply-percentage-btc">
+                        (Loading...)
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="supply-progress-bar-btc"></div>
+                </div>
+            </div>
+
+            <div id="eth-supply-section" class="supply-details-section hidden">
+                <div class="supply-header">
+                    <h2>Ethereum Supply Details</h2>
+                </div>
+                <button id="eth-fullscreen-btn" class="fullscreen-btn" title="전체 화면">↗</button>
+                <div class="supply-info">
+                     <span id="current-supply-eth">Loading...</span>
+                </div>
+                <iframe id="eth-supply-chart-iframe" src="graph_eth_supply.html" style="width: 100%; height: 550px; border: none; margin-top: 15px;"></iframe>
+                
             </div>
 
         </main>
         
         <footer>
+            <p>
+                <a href="https://hits.seeyoufarm.com">
+                    <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdlwpsms3gkrsus-glitch.github.io%2Fcrypto_price_vs_spot_etf_flow-chart%2F&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=visitors&edge_flat=false"/>
+                </a>
+            </p>
             <p>Website ver: 2.1 ver | Spot ETF Flow Source: <a href="https://farside.co.uk/" target="_blank">Farside Investors</a></p>
             <p>Created by: <a href="mailto:dlwpsms3gkrsus@gmail.com">dlwpsms3gkrsus@gmail.com</a></p>
         </footer>
@@ -294,16 +360,22 @@
         const comparisonChartIframe = document.getElementById('comparison-chart-iframe');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         const comparisonChartContainer = document.getElementById('comparison-chart-container');
-        const farsideLinkBtn = document.getElementById('farside-link-btn'); // 바로가기 버튼 요소 추가
+        const farsideLinkBtn = document.getElementById('farside-link-btn');
+        // BTC 공급량 DOM
+        const btcSupplySection = document.getElementById('btc-supply-section');
+        const currentSupplyBtc = document.getElementById('current-supply-btc');
+        const supplyPercentageBtc = document.getElementById('supply-percentage-btc');
+        const supplyProgressBarBtc = document.getElementById('supply-progress-bar-btc');
+        // ETH 공급량 DOM
+        const ethSupplySection = document.getElementById('eth-supply-section');
+        const currentSupplyEth = document.getElementById('current-supply-eth');
+        const ethFullscreenBtn = document.getElementById('eth-fullscreen-btn');
         
         // --- 상태 관리 ---
         let currentCoin = 'BTC';
         let lastPrice = 0;
-        let tradingViewWidget;
 
         // --- 데이터 업데이트 함수 ---
-
-        // 1. 실시간 가격 가져오기
         async function fetchPrice(coin) {
             try {
                 const response = await fetch(`https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${coin}&tsyms=USD`);
@@ -322,17 +394,12 @@
                 cryptoChangeElement.classList.toggle('down', priceData.CHANGE24HOUR < 0);
                 
                 lastPrice = priceData.PRICE;
-            } catch (error) {
-                console.error(`Error fetching ${coin} price:`, error);
-                cryptoPriceElement.innerText = 'Error';
-            }
+            } catch (error) { console.error(`Error fetching ${coin} price:`, error); }
         }
 
-        // 2. CSV 파일에서 ETF 데이터 읽어오기
         async function displayEtfData(coin) {
             etfTitleElement.innerText = `Total ${coin} ETF Net Inflow`;
             const csvFileName = coin === 'BTC' ? 'bitcoin_etf_total_flow.csv' : 'ethereum_etf_total_flow.csv';
-
             try {
                 const response = await fetch(csvFileName);
                 if (!response.ok) throw new Error('Network response was not ok.');
@@ -362,26 +429,22 @@
                 etfTotalElement.classList.toggle('down', cumulativeInflow < 0);
                 etfChangeElement.classList.toggle('up', dailyInflow >= 0);
                 etfChangeElement.classList.toggle('down', dailyInflow < 0);
-
             } catch (error) {
-                console.error(`Error fetching or parsing ${csvFileName}:`, error);
                 etfTotalElement.innerText = '데이터 로드 실패';
                 etfChangeElement.innerText = '';
             }
         }
         
-        // 3. 실시간 차트 업데이트
         function updateChart(coin) {
             chartTitleElement.innerText = `실시간 ${coin === 'BTC' ? '비트코인' : '이더리움'} 가격`;
             chartContainer.innerHTML = '';
-            tradingViewWidget = new TradingView.widget({
+            new TradingView.widget({
                 "autosize": true, "symbol": `BITSTAMP:${coin}USD`, "interval": "D",
                 "timezone": "Etc/UTC", "theme": "dark", "style": "1", "locale": "ko",
                 "enable_publishing": false, "allow_symbol_change": false, "container_id": "chart-container"
             });
         }
         
-        // 4. 현재 시간 표시
         function displayCurrentTime() {
             const now = new Date();
             const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
@@ -390,17 +453,44 @@
             timestampElement.innerHTML = `🇺🇸 ${usEasternTime} (US Eastern)<br>🇰🇷 ${koreaTime} (Korea)`;
         }
 
-        // ▼▼▼ [수정] 5. 상세 비교 차트 업데이트 ▼▼▼
         function updateComparisonChart(coin) {
             const coinName = coin === 'BTC' ? 'BTC' : 'ETH';
             const chartFile = coin === 'BTC' ? 'graph_btc.html' : 'graph_eth.html';
             const farsideLink = coin === 'BTC' 
-                ? 'https://farside.co.uk/btc/' 
-                : 'https://farside.co.uk/eth/';
+                ? 'https://farside.co.uk/bitcoin-etf-flow-all-data/' 
+                : 'https://farside.co.uk/ethereum-etf-flow-all-data/';
             
             comparisonChartTitle.innerText = `${coinName} 현물 ETF 현금 흐름 & 가격 비교`;
             comparisonChartIframe.src = chartFile;
-            farsideLinkBtn.href = farsideLink; // 바로가기 버튼의 링크를 동적으로 변경
+            farsideLinkBtn.href = farsideLink;
+        }
+        
+        async function updateBtcSupplyDetails() {
+            try {
+                const response = await fetch(`https://blockchain.info/q/totalbc`);
+                const satoshis = await response.text();
+                const currentSupply = parseFloat(satoshis) / 100000000;
+                const maxSupply = 21000000;
+                const percentage = (currentSupply / maxSupply) * 100;
+
+                currentSupplyBtc.innerText = `${currentSupply.toLocaleString('en-US', {maximumFractionDigits: 0})} BTC`;
+                supplyPercentageBtc.innerText = `(${percentage.toFixed(4)}%)`;
+                supplyProgressBarBtc.style.width = `${percentage}%`;
+            } catch (error) {
+                currentSupplyBtc.innerText = 'Error';
+            }
+        }
+        
+        async function updateEthSupplyDetails() {
+            try {
+                const response = await fetch(`https://api.coingecko.com/api/v3/coins/ethereum?localization=false&tickers=false&market_data=true&community_data=false&developer_data=false&sparkline=false`);
+                const data = await response.json();
+                const circulatingSupply = data.market_data.circulating_supply;
+                currentSupplyEth.innerText = `현재 발행량: ${circulatingSupply.toLocaleString('en-US', {maximumFractionDigits: 0})} ETH`;
+            } catch(error) {
+                console.error('Error fetching ETH supply:', error);
+                currentSupplyEth.innerText = '현재 발행량: 데이터 로드 실패';
+            }
         }
 
         // --- 메인 컨트롤 함수 ---
@@ -410,6 +500,16 @@
             displayEtfData(currentCoin);
             updateChart(currentCoin);
             updateComparisonChart(currentCoin);
+
+            if (currentCoin === 'BTC') {
+                updateBtcSupplyDetails();
+                btcSupplySection.classList.remove('hidden');
+                ethSupplySection.classList.add('hidden');
+            } else { // ETH
+                updateEthSupplyDetails();
+                btcSupplySection.classList.add('hidden');
+                ethSupplySection.classList.remove('hidden');
+            }
         }
 
         // --- 이벤트 리스너 설정 ---
@@ -431,20 +531,26 @@
 
         fullscreenBtn.addEventListener('click', () => {
             comparisonChartContainer.classList.toggle('fullscreen-mode');
-            if (comparisonChartContainer.classList.contains('fullscreen-mode')) {
-                fullscreenBtn.innerHTML = '↙';
-                fullscreenBtn.title = '전체 화면 닫기';
-            } else {
-                fullscreenBtn.innerHTML = '↗';
-                fullscreenBtn.title = '전체 화면';
-            }
+            const icon = comparisonChartContainer.classList.contains('fullscreen-mode');
+            fullscreenBtn.innerHTML = icon ? '↙' : '↗';
+            fullscreenBtn.title = icon ? '전체 화면 닫기' : '전체 화면';
+        });
+
+        ethFullscreenBtn.addEventListener('click', () => {
+            ethSupplySection.classList.toggle('fullscreen-mode');
+            const icon = ethSupplySection.classList.contains('fullscreen-mode');
+            ethFullscreenBtn.innerHTML = icon ? '↙' : '↗';
+            ethFullscreenBtn.title = icon ? '전체 화면 닫기' : '전체 화면';
         });
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape' && comparisonChartContainer.classList.contains('fullscreen-mode')) {
-                comparisonChartContainer.classList.remove('fullscreen-mode');
-                fullscreenBtn.innerHTML = '↗';
-                fullscreenBtn.title = '전체 화면';
+            if (event.key === 'Escape') {
+                if (comparisonChartContainer.classList.contains('fullscreen-mode')) {
+                    fullscreenBtn.click();
+                }
+                if (ethSupplySection.classList.contains('fullscreen-mode')) {
+                    ethFullscreenBtn.click();
+                }
             }
         });
 
@@ -454,8 +560,11 @@
             displayCurrentTime();
             setInterval(displayCurrentTime, 1000);
             setInterval(() => fetchPrice(currentCoin), 30000);
+            setInterval(() => {
+                if(currentCoin === 'BTC') updateBtcSupplyDetails();
+                else updateEthSupplyDetails();
+            }, 300000); // 5분마다 공급량 업데이트
         });
     </script>
 </body>
-
 </html>
