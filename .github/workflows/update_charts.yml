@@ -29,6 +29,7 @@ jobs:
           python "run_analysis with ema_btc.py"
           python "run_analysis_eth.py"
           python "ethereum_growth_chart.py"
+          python "btc_growth_chart.py"
       # ▲▲▲ ----------------------------------------- ▲▲▲
 
       - name: Commit and push changes
