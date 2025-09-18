@@ -1,0 +1,6 @@
+pandas
+plotly
+yfinance
+selenium
+webdriver-manager
+requests
