@@ -3,7 +3,7 @@ name: Update ETF Charts Daily
 on:
   workflow_dispatch: # 수동 실행 버튼
   schedule:
-    # 한국 시간(KST) 기준 매일 오전 9시 10분에 실행
+    # 한국 시간(KST) 기준 매일 오전 9시 10분에 실행 (UTC 00:10)
     - cron: '10 0 * * *'
 
 jobs:
@@ -11,31 +11,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # 최신 버전(v4)으로 업데이트
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5 # 최신 버전(v5)으로 업데이트
         with:
           python-version: '3.9'
 
+      # ▼▼▼ [수정 1] requirements.txt를 사용한 의존성 설치 ▼▼▼
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas plotly yfinance selenium webdriver-manager
+          pip install -r requirements.txt
+      # ▲▲▲ ---------------------------------------------------- ▲▲▲
 
-      # ▼▼▼ [핵심 수정] BTC와 ETH 스크립트 및 eth supply chart 순서대로 실행 ▼▼▼
       - name: Run chart generation scripts
         run: |
           python "run_analysis with ema_btc.py"
           python "run_analysis_eth.py"
           python "ethereum_growth_chart.py"
           python "btc_growth_chart.py"
-      # ▲▲▲ ----------------------------------------- ▲▲▲
 
+      # ▼▼▼ [수정 2] 안정적인 push를 위해 git pull 추가 ▼▼▼
       - name: Commit and push changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
+          # 변경 사항이 있을 때만 커밋
           git diff --quiet && git diff --staged --quiet || git commit -m "📊 Daily chart and data update"
+          # Push 전에 원격 저장소의 변경사항을 먼저 가져옴
+          git pull --rebase
           git push
+      # ▲▲▲ ---------------------------------------------------- ▲▲▲
